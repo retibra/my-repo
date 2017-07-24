@@ -8,17 +8,26 @@ class BPL::Library
 
   attr_accessor :name, :address, :contact_number, :hours
 
+  @@all = []
+
+  def initialize
+    @@all << self
+  end
+
   def self.all
     puts "all libraries"
-    html = File.read("www.bpl.org/general/hours/")
-    index_scrape = Nokogiri::HTML(html)
-
-    index_scrape.css("div h2").each do |element|
-      lib = self.new
-      lib.name = element
-    end
-
+    @@all
   end
-  binding.pry
+
+  def self.scrape
+    index_scrape = Nokogiri::HTML(open("http://www.bpl.org/general/hours/"))
+
+    index_scrape.css("h2").each do |element|
+      lib = self.new
+      lib.name = element.text
+    end
+    binding.pry
+  end
+binding.pry
 
 end
