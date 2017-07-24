@@ -1,5 +1,8 @@
+require_relative 'cli'
+
 require 'nokogiri'
-require 'openUri'
+require 'open-uri'
+require 'pry'
 
 class BPL::Library
 
@@ -7,10 +10,15 @@ class BPL::Library
 
   def self.all
     puts "all libraries"
-    index_scrape = Nokogiri::HTML(open(http://www.bpl.org/general/hours/))
+    html = File.read("www.bpl.org/general/hours/")
+    index_scrape = Nokogiri::HTML(html)
 
+    index_scrape.css("div h2").each do |element|
+      lib = self.new
+      lib.name = element
+    end
 
   end
-
+  binding.pry
 
 end

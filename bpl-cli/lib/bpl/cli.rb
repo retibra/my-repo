@@ -1,4 +1,5 @@
 require_relative "version"
+require_relative 'library'
 
 class BPL::CLI
 
