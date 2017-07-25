@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
-require './lib/bpl'
+require_relative './lib/bpl.rb'
 
 BPL::CLI.new.call

@@ -22,9 +22,12 @@ class BPL::Library
   def self.scrape
     index_scrape = Nokogiri::HTML(open("http://www.bpl.org/general/hours/"))
 
-    index_scrape.css("h2").each do |element|
-      lib = self.new
-      lib.name = element.text
+    index_scrape.css("div#maincontent h2").each_with_index do |element, i = 0|
+      if i != 0
+        lib = self.new
+        lib.name = element.text
+        lib.address = element.next.text.gsub("*.617\\","")
+      end
     end
     binding.pry
   end
