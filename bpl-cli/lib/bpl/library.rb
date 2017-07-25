@@ -1,5 +1,3 @@
-require_relative 'cli'
-
 require 'nokogiri'
 require 'open-uri'
 require 'pry'
@@ -23,12 +21,12 @@ class BPL::Library
     index_scrape = Nokogiri::HTML(open("http://www.bpl.org/general/hours/"))
     days = ["Monday: ", "Tuesday: ", "Wednesday: ", "Thursday: ", "Friday: ", "Saturday: ", "Sunday: "]
     totalhours = []
+    dummy = index_scrape.css("div#maincontent td")
     index_scrape.css("div#maincontent td").each_with_index do |element, i = 0|
       if i.odd?
-         quickscrape = element.text.gsub("\u2013","")
-         hours = element.text.gsub("2013","").gsub("p.m.","p.m., ").gsub("a.m.","a.m. - ").split(',')
+         # dummy << element.text.gsub("\u2013","") #how do i scrape? I thought about doing by p.m., but that doesn't work. neither does character length
+         hours = element.text.gsub("\u2013","").gsub("p.m.","p.m., ").gsub("a.m.","a.m. - ").split(',')
          totalhours << days.zip(hours).map(&:join)
-         binding.pry
       end
 
     end
