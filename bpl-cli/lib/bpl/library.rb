@@ -26,7 +26,8 @@ class BPL::Library
       if i != 0
         lib = self.new
         lib.name = element.text
-        lib.address = element.next.text.gsub("*.617\\","")
+        lib.address = element.next.text.gsub(/617.*/,"")
+        lib.contact_number = element.next.text.gsub(/.*617/,"617")[0..11]
       end
     end
     binding.pry
