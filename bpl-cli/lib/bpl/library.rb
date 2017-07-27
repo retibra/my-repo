@@ -5,7 +5,7 @@ require_relative 'version'
 
 class BPL::Library
 
-  attr_accessor :name, :address, :zip_code, :contact_number, :hours
+  attr_accessor :name, :address, :zip_code, :neighborhood, :contact_number, :hours
 
   @@all = []
 
@@ -36,6 +36,7 @@ class BPL::Library
         lib = self.new
         lib.name = element.text
         lib.address = element.next.text.gsub(/617.*/,"")
+        lib.neighborhood = lib.address.split(", ")[1]
         lib.zip_code = lib.address[-5..-1]
         lib.contact_number = element.next.text.gsub(/.*617/,"617")[0..11]
         lib.hours = totalhours[i-1]
