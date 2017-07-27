@@ -14,7 +14,6 @@ class BPL::Library
   end
 
   def self.all
-    puts "all libraries"
     @@all
   end
 
@@ -42,8 +41,8 @@ class BPL::Library
         lib.hours = totalhours[i-1]
       end
     end
-    binding.pry
+
   end
-binding.pry
+
 
 end
