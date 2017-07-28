@@ -24,7 +24,7 @@ class BPL::Library
     index_scrape.css("div#maincontent td").each_with_index do |element, i = 0|
       if i.odd?
          hours = []
-         hours << element.text.gsub("\u2013","").split("m.").each_slice(2).map { |e| "#{e.first}m. - #{e.last}m."}
+         hours << element.text.gsub("\u2013","").split("m.").each_slice(2).map { |e| "#{e.first}m. - #{e.last}m."} if 
          totalhours << days.zip(hours.flatten).map(&:join)
       end
 
