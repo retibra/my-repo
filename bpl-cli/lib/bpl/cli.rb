@@ -46,7 +46,23 @@ class BPL::CLI
       by_neighborhood
     elsif @neighborhoods.include?(input)
       puts "These are the libraries in your neighborhood:"
-      
+      local_libraries = []
+      @libraries.each do |library|
+        if library.neighborhood.downcase == input
+          local_libraries << library
+        end
+      end
+      local_libraries.each do |lib|
+        puts "========================================="
+        puts "Name: #{lib.name.gsub(" Library", "")} Library"
+        puts "Address: #{lib.address}"
+        puts "Neighborhood: #{lib.neighborhood}"
+        puts "Zip Code: #{lib.zip_code}"
+        puts "Contact Number: #{lib.contact_number}"
+        puts "Library Hours:"
+        lib.hours.each {|d| puts"#{d}"}
+        puts "========================================="
+      end
     else
       puts "There are no libraries in your neighborhood"
       choose_query

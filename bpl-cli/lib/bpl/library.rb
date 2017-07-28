@@ -8,7 +8,6 @@ class BPL::Library
   attr_accessor :name, :address, :zip_code, :neighborhood, :contact_number, :hours
 
   @@all = []
-  @@neighborhoods = []
 
   def initialize
     @@all << self
@@ -16,10 +15,6 @@ class BPL::Library
 
   def self.all
     @@all
-  end
-
-  def self.neighborhoods
-    @@neighborhoods.uniq
   end
 
   def self.scrape
@@ -40,8 +35,11 @@ class BPL::Library
         lib = self.new
         lib.name = element.text
         lib.address = element.next.text.gsub(/617.*/,"")
-        lib.neighborhood = lib.address.split(", ")[1]
-        @@neighborhoods << lib.neighborhood
+        if lib.address.include?("Boston")
+          lib.neighborhood = "Boston"
+        else
+          lib.neighborhood = lib.address.split(", ")[1]
+        end
         lib.zip_code = lib.address[-5..-1]
         lib.contact_number = element.next.text.gsub(/.*617/,"617")[0..11]
         lib.hours = totalhours[i-1]
