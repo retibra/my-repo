@@ -5,32 +5,66 @@ require 'pry'
 
 class BPL::CLI
 
-  attr_accessor :libraries, :neighborhood
+  attr_accessor :libraries, :neighborhoods
 
   def call
     puts "Welcome to the Boston Library finder -- let's find some books!"
     get_library_info
-    list_libraries
+    choose_query
     goodbye
   end
 
   def get_library_info
     BPL::Library.scrape
+    @neighborhoods = ["boston", "dorchester", "brighton", "charlestown", "jamaica plain", "roxbury", "east boston", "allston", "hyde park", "mattapan", "roslindale", "south boston", "west roxbury"]
     @libraries = BPL::Library.all
   end
 
-  def list_libraries
+  def choose_query
     puts "Would you like to look up your local Boston library by neighborhood or zip code?"
 
     input = gets.strip.downcase.to_s
 
     case input
-    when "02129"
-        puts "Charlestown Library"
-    when "list"
-      puts "all libraries"
+      when "neighborhood"
+        by_neighborhood
+      when "zip code"
+        by_zipcode
+      else
+        choose_query
+    end
+  end
+
+  def by_neighborhood
+    puts "Please enter your neighborhood or type 'list' to receive a list of neighborhoods."
+
+    input = gets.strip.downcase.to_s
+
+    if input == "list"
+      @neighborhoods.each { |n| puts "#{n.split.map(&:capitalize).join(' ')}"}
+      binding.pry
+      by_neighborhood
+    elsif @neighborhoods.include?(input)
+      puts "These are the libraries in your neighborhood:"
+      
     else
-      list_libraries
+      puts "There are no libraries in your neighborhood"
+      choose_query
+    end
+  end
+
+  def by_zipcode
+    puts "Please enter your zip code (e.g. 02129):"
+
+    input = gets.strip.downcase.to_s
+
+    case input
+      when "neighborhood"
+        by_neighborhood
+      when "zip code"
+        by_zipcode
+      else
+        choose_query
     end
 
   end
