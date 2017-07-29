@@ -20,10 +20,9 @@ class BPL::CLI
     @zip_codes = []
     @libraries = BPL::Library.all
     @libraries.each do |element|
-      @neighborhoods << element.neighborhood unless @neighborhoods.include?(element.neighborhood)
+      @neighborhoods << element.neighborhood.downcase unless @neighborhoods.include?(element.neighborhood.downcase)
       @zip_codes << element.zip_code unless @zip_codes.include?(element.zip_code)
     end
-    binding.pry
   end
 
   def choose_query
@@ -96,6 +95,19 @@ class BPL::CLI
       puts "Library Hours:"
       lib.hours.each {|d| puts"#{d}"}
       puts "========================================="
+    end
+    lookup_again?
+  end
+
+  def lookup_again?
+    puts "Would you like to lookup another library (y/n)?"
+    input = gets.strip.downcase.to_s
+
+    if input == "y"
+      choose_query
+    elsif input == "n"
+    else
+      lookup_again?
     end
   end
 
