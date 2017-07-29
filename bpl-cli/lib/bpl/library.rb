@@ -24,7 +24,14 @@ class BPL::Library
     index_scrape.css("div#maincontent td").each_with_index do |element, i = 0|
       if i.odd?
          hours = []
-         hours << element.text.gsub("\u2013","").split("m.").each_slice(2).map { |e| "#{e.first}m. - #{e.last}m."} if 
+         hours << element.text.gsub("\u2013","").gsub("Closed", "Closedm.").split("m.").each_slice(2).map {|e| "#{e.first}m. - #{e.last}m."}
+         hours << "Closed" while hours.length < 6
+         hours.each_with_index do |hours_element, index|
+           if hours_element.include?("Closed")
+             hours[index] = "Closed"
+           end
+         end
+
          totalhours << days.zip(hours.flatten).map(&:join)
       end
 
