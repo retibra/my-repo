@@ -16,12 +16,18 @@ class BPL::CLI
 
   def get_library_info
     BPL::Library.scrape
-    @neighborhoods = ["boston", "dorchester", "brighton", "charlestown", "jamaica plain", "roxbury", "east boston", "allston", "hyde park", "mattapan", "roslindale", "south boston", "west roxbury"]
+    @neighborhoods = []
+    @zip_codes = []
     @libraries = BPL::Library.all
+    @libraries.each do |element|
+      @neighborhoods << element.neighborhood unless @neighborhoods.include?(element.neighborhood)
+      @zip_codes << element.zip_code unless @zip_codes.include?(element.zip_code)
+    end
+    binding.pry
   end
 
   def choose_query
-    puts "Would you like to look up your local Boston library by neighborhood or zip code?"
+    puts "Would you like to look up your local Boston library by neighborhood or zip code? If you would like to exit, type 'exit'."
 
     input = gets.strip.downcase.to_s
 
@@ -30,6 +36,7 @@ class BPL::CLI
         by_neighborhood
       when "zip code"
         by_zipcode
+      when "exit"
       else
         choose_query
     end
@@ -42,7 +49,6 @@ class BPL::CLI
 
     if input == "list"
       @neighborhoods.each { |n| puts "#{n.split.map(&:capitalize).join(' ')}"}
-      binding.pry
       by_neighborhood
     elsif @neighborhoods.include?(input)
       puts "These are the libraries in your neighborhood:"
@@ -52,19 +58,9 @@ class BPL::CLI
           local_libraries << library
         end
       end
-      local_libraries.each do |lib|
-        puts "========================================="
-        puts "Name: #{lib.name.gsub(" Library", "")} Library"
-        puts "Address: #{lib.address}"
-        puts "Neighborhood: #{lib.neighborhood}"
-        puts "Zip Code: #{lib.zip_code}"
-        puts "Contact Number: #{lib.contact_number}"
-        puts "Library Hours:"
-        lib.hours.each {|d| puts"#{d}"}
-        puts "========================================="
-      end
+      library_print(local_libraries)
     else
-      puts "There are no libraries in your neighborhood"
+      puts "Unfortunately, there are no libraries in your neighborhood."
       choose_query
     end
   end
@@ -74,15 +70,33 @@ class BPL::CLI
 
     input = gets.strip.downcase.to_s
 
-    case input
-      when "neighborhood"
-        by_neighborhood
-      when "zip code"
-        by_zipcode
-      else
-        choose_query
+    if @zip_codes.include?(input)
+      puts "These are the libraries in your zip code:"
+      local_libraries = []
+      @libraries.each do |library|
+        if library.zip_code.downcase == input
+          local_libraries << library
+        end
+      end
+      library_print(local_libraries)
+    else
+      puts "Unfortunately, there are no libraries in your zip_code."
+      choose_query
     end
+  end
 
+  def library_print(local_libraries)
+    local_libraries.each do |lib|
+      puts "========================================="
+      puts "Name: #{lib.name.gsub(" Library", "")} Library"
+      puts "Address: #{lib.address}"
+      puts "Neighborhood: #{lib.neighborhood}"
+      puts "Zip Code: #{lib.zip_code}"
+      puts "Contact Number: #{lib.contact_number}"
+      puts "Library Hours:"
+      lib.hours.each {|d| puts"#{d}"}
+      puts "========================================="
+    end
   end
 
   def goodbye
