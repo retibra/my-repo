@@ -60,7 +60,7 @@ class BPL::CLI
       library_print(local_libraries)
     else
       puts "Unfortunately, there are no libraries in your neighborhood."
-      choose_query
+      lookup_again?
     end
   end
 
@@ -80,7 +80,7 @@ class BPL::CLI
       library_print(local_libraries)
     else
       puts "Unfortunately, there are no libraries in your zip_code."
-      choose_query
+      lookup_again?
     end
   end
 
