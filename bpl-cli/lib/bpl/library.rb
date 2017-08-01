@@ -1,7 +1,4 @@
-require 'nokogiri'
-require 'open-uri'
-require 'pry'
-require_relative 'version'
+
 
 class BPL::Library
 
@@ -56,6 +53,10 @@ class BPL::Library
       end
     end
 
+  end
+
+  def self.find_by(attr, input)
+    self.all.select{|l| l.send("#{attr}") == input.capitalize}
   end
 
 

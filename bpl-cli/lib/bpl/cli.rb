@@ -1,8 +1,3 @@
-require_relative 'version'
-require_relative 'library'
-
-require 'pry'
-
 class BPL::CLI
 
   attr_accessor :libraries, :neighborhoods
@@ -51,12 +46,7 @@ class BPL::CLI
       by_neighborhood
     elsif @neighborhoods.include?(input)
       puts "These are the libraries in your neighborhood:"
-      local_libraries = []
-      @libraries.each do |library|
-        if library.neighborhood.downcase == input
-          local_libraries << library
-        end
-      end
+      local_libraries = BPL::Library.find_by(:neighborhood, input)
       library_print(local_libraries)
     else
       puts "Unfortunately, there are no libraries in your neighborhood."
@@ -72,11 +62,7 @@ class BPL::CLI
     if @zip_codes.include?(input)
       puts "These are the libraries in your zip code:"
       local_libraries = []
-      @libraries.each do |library|
-        if library.zip_code.downcase == input
-          local_libraries << library
-        end
-      end
+      local_libraries = BPL::Library.find_by(:zip_code, input)
       library_print(local_libraries)
     else
       puts "Unfortunately, there are no libraries in your zip_code."
